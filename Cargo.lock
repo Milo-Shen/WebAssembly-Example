@@ -31,6 +31,11 @@ dependencies = [
 ]
 
 [[package]]
+name = "core_simd"
+version = "0.1.0"
+source = "git+https://github.com/rust-lang/portable-simd#72df4c45056a8bc0d1b3f06fdc828722177f0763"
+
+[[package]]
 name = "js-sys"
 version = "0.3.56"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -212,6 +217,7 @@ name = "webessembly-example"
 version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",
+ "core_simd",
  "wasm-bindgen",
  "wasm-bindgen-test",
  "wee_alloc",

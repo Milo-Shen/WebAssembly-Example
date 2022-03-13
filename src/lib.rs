@@ -37,3 +37,23 @@ pub fn run_fibonacci(iter: u32, len: u32) -> u32 {
     }
     return total;
 }
+
+#[wasm_bindgen]
+pub fn plus_ten() -> u32 {
+    let mut arr: Vec<Vec<u32>> = vec![];
+    for i in 0..1e7 as u32 {
+        let mut _arr = vec![];
+        for j in 0..4 {
+            _arr.push(j)
+        }
+        arr.push(_arr)
+    }
+
+    for i in &mut arr {
+        for j in i {
+            *j += 10;
+        }
+    }
+
+    return 1;
+}
