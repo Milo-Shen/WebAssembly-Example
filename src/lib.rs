@@ -1,5 +1,8 @@
+#![feature(portable_simd)]
+
 mod utils;
 
+use core_simd::*;
 use wasm_bindgen::prelude::*;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
@@ -39,21 +42,26 @@ pub fn run_fibonacci(iter: u32, len: u32) -> u32 {
 }
 
 #[wasm_bindgen]
-pub fn plus_ten() -> u32 {
-    let mut arr: Vec<Vec<u32>> = vec![];
-    for i in 0..1e7 as u32 {
-        let mut _arr = vec![];
-        for j in 0..4 {
-            _arr.push(j)
+pub fn plus_ten(num: u32) {
+    let mut array = vec![0, 0, 0, 0];
+    let mut count = 0;
+    loop {
+        count += 1;
+        for i in &mut array {
+            *i += 1;
         }
-        arr.push(_arr)
+        if count >= num { break; }
     }
+}
 
-    for i in &mut arr {
-        for j in i {
-            *j += 10;
-        }
+#[wasm_bindgen]
+pub fn plus_ten_simd(num: u32) {
+    let mut a = i32x4::splat(1);
+    let mut b = i32x4::from_array([0, 0, 0, 0]);
+    let mut count = 0;
+    loop {
+        count += 1;
+        b += a;
+        if count >= num { break; }
     }
-
-    return 1;
 }
