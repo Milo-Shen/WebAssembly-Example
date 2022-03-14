@@ -42,7 +42,7 @@ pub fn run_fibonacci(iter: u32, len: u32) -> u32 {
 }
 
 #[wasm_bindgen]
-pub fn plus_ten(num: u32) {
+pub fn plus_ten(num: i32) -> i32 {
     let mut array = vec![0, 0, 0, 0];
     let mut count = 0;
     loop {
@@ -52,10 +52,11 @@ pub fn plus_ten(num: u32) {
         }
         if count >= num { break; }
     }
+    array[0]
 }
 
 #[wasm_bindgen]
-pub fn plus_ten_simd(num: u32) {
+pub fn plus_ten_simd(num: i32) -> i32 {
     let mut a = i32x4::splat(1);
     let mut b = i32x4::from_array([0, 0, 0, 0]);
     let mut count = 0;
@@ -64,4 +65,5 @@ pub fn plus_ten_simd(num: u32) {
         b += a;
         if count >= num { break; }
     }
+    b.to_array()[0]
 }
