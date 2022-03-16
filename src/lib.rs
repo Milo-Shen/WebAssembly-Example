@@ -5,6 +5,12 @@ mod utils;
 use core_simd::*;
 use wasm_bindgen::prelude::*;
 
+#[cfg(feature = "parallel")]
+use rayon::prelude::*;
+
+#[cfg(feature = "parallel")]
+pub use wasm_bindgen_rayon::init_thread_pool;
+
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
 #[cfg(feature = "wee_alloc")]
@@ -66,4 +72,34 @@ pub fn plus_ten_simd(num: i32) -> i32 {
         if count >= num { break; }
     }
     b.to_array()[0]
+}
+
+struct SimdThread {
+    count: i32,
+}
+
+impl SimdThread {
+    fn new(num: i32) -> Self {
+        Self { count: num }
+    }
+
+    // Multi-threaded implementation.
+    #[cfg(feature = "rayon")]
+    fn _plus_ten_simd_threads(&self) -> i32 {
+        let mut x = 1;
+        (0..self.count).into_par_iter().map(move |y| x + 1);
+        x
+    }
+
+    // Single-threaded implementation.
+    #[cfg(not(feature = "rayon"))]
+    fn _plus_ten_simd_threads(&self) -> i32 {
+        let mut x = 1;
+        x
+    }
+}
+
+#[wasm_bindgen]
+pub fn plus_ten_simd_threads(num: i32) -> i32 {
+    SimdThread::new(num)._plus_ten_simd_threads()
 }
